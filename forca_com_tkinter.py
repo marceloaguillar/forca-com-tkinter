@@ -9,7 +9,10 @@ def verificar_palpite(event=None):
     global chances
     global charada
     global mensagem_label
+    global mensagem_erro_label
     global janela
+
+    mensagem_erro = ''  # Inicializa a variável mensagem_erro
 
     palpite = entrada.get().upper()
 
@@ -21,9 +24,8 @@ def verificar_palpite(event=None):
     if palpite in charada:
         chute.append(palpite)
     else:
-        mensagem_label['text'] = 'Você errou...'
         chances -= 1
-        mensagem_label['text'] += f' Você ainda tem {chances} chance(s)'
+        mensagem_erro = f'Você errou... \nVocê ainda tem {chances} chance(s)'
 
     correto = ''
     for letra_secreta in charada:
@@ -35,7 +37,7 @@ def verificar_palpite(event=None):
     mensagem_label['text'] = f'A palavra é {correto}'
 
     if correto == charada:
-        mensagem_label['text'] = 'Parabéns, pelo seu conhecimento, você deve ter só mais uns 4 anos de vida....'
+        mensagem_label['text'] = f'Parabéns, a palavra era {correto}.\nPelo seu conhecimento, você deve ter só mais uns 4 anos de vida....'
         time.sleep(2)
         reiniciar_jogo()
 
@@ -46,7 +48,10 @@ def verificar_palpite(event=None):
         reiniciar_jogo()
 
     entrada.delete(0, tk.END)  # Limpa a caixa de texto
-    chances_label['text'] = f'Chances restantes: {chances}'  # Atualiza o número de chances restantes
+    
+
+    if mensagem_erro:
+        mensagem_erro_label['text'] = mensagem_erro
 
 def reiniciar_jogo():
     global janela
@@ -62,7 +67,7 @@ def forca():
     global chances
     global charada
     global mensagem_label
-    global chances_label
+    global mensagem_erro_label
     global janela
 
     bd = ['COROTE','LOKAL','BAVARIA','CHANCELER','CATUABA','SERRANA','CHEVETTE','BALALAIKA','ASKOV','GLACIAL','CONTI','PRESIDENTE','TEQUILOKA','NATASHA','ITAIPAVA']
@@ -74,7 +79,7 @@ def forca():
     janela = tk.Tk()
     janela.title('FORCA DE BEBIDAS')
 
-    mensagem_label = tk.Label(janela, text='FORCA DAS BEBIDAS QUE A CADA GOLE, DIMINUEM A EXPECTATIVA DE VIDA EM 10 ANOS!!')
+    mensagem_label = tk.Label(janela, text='FORCA DAS BEBIDAS QUE A CADA GOLE, \nDIMINUEM A EXPECTATIVA DE VIDA EM 10 ANOS!!')
     mensagem_label.pack()
 
     dica = '' #APRESENTA UMA DICA, BASEADO NA PALAVRA QUE O CÓDIGO ESCOLHER PARA O JOGO
@@ -93,9 +98,8 @@ def forca():
     botao = tk.Button(janela, text='Palpite', command=verificar_palpite)
     botao.pack()
 
-    #APRESENTAR NA JANELA AS CHANCES RESTANTES
-    chances_label = tk.Label(janela, text=f'Chances restantes: {chances}')
-    chances_label.pack()
+    mensagem_erro_label = tk.Label(janela, text='')
+    mensagem_erro_label.pack()
 
     janela.mainloop()
 
